@@ -3,6 +3,9 @@ import pandas as pd
 
 st.set_page_config(page_title="Práctica Contable", layout="wide")
 st.title("Práctica Contable: Asientos, Libro Mayor y Balance")
+st.subheader("Análisis de Procesos Administrativos 2025")
+st.markdown("Alexis Rocca - Alexis Barbero")
+st.divider()
 
 # Definición inicial de asientos contables sugeridos
 default_entries = [
@@ -22,7 +25,7 @@ default_entries = [
 
 # Editable: usuario puede añadir/editar asientos
 entries_df = pd.DataFrame(default_entries)
-st.subheader("1. Registro de Asientos Contables")
+st.subheader("Registro de Asientos Contables")
 edited_df = st.data_editor(entries_df, num_rows="dynamic", use_container_width=True)
 
 # 2. Desarrollo del Libro Mayor
@@ -31,7 +34,7 @@ grouped = edited_df.groupby("Cuenta").agg(
     Haber=pd.NamedAgg(column="Haber", aggfunc="sum")
 )
 grouped["Saldo"] = grouped["Debe"] - grouped["Haber"]
-st.subheader("2. Libro Mayor")
+st.subheader("Libro Mayor")
 st.dataframe(grouped.reset_index(), use_container_width=True)
 
 # 3. Elaboración del Balance
@@ -42,7 +45,7 @@ balance_summary = pd.DataFrame({
     "Total Debe": [t_balance["AuxDebe"].sum()],
     "Total Haber": [t_balance["AuxHaber"].sum()]
 })
-st.subheader("3. Balance de Sumas y Saldos")
+st.subheader("Balance de Sumas y Saldos")
 st.dataframe(balance_summary, use_container_width=True)
 if balance_summary.at[0, "Total Debe"] == balance_summary.at[0, "Total Haber"]:
     st.success("✅ El Balance está cuadrado.")
@@ -50,5 +53,7 @@ else:
     st.error("❌ El Balance NO cuadra.")
 
 # 4. Visualización de Resultados
-st.subheader("4. Visualización de Saldos por Cuenta")
+st.subheader("Visualización de Saldos por Cuenta")
 st.bar_chart(grouped["Saldo"])
+
+st.balloons()
